@@ -7,7 +7,9 @@ const User = require('./models/User');
 const sequelize = require('./config/sequelize.config');
 const app = express();
 
-//... Endpoints for the login and registration
+app.use(cors());
+app.use(express.json());
+
 
 sequelize.sync().then(() => {
     app.listen(process.env.PORT, () => {
