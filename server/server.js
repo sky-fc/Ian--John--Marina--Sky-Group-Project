@@ -3,7 +3,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const User = require('./models/User');
+const User = require('./models/UserModel');
+const UserController = require('./controllers/UserController'); 
 const sequelize = require('./config/sequelize.config');
 const app = express();
 

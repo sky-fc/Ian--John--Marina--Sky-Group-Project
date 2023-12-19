@@ -4,22 +4,18 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-    // State to manage form data
     const [formData, setFormData] = useState({
         image: null,
         description: '',
     });
 
-    // Event handler for form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Create a FormData object to send files
         const formDataToSend = new FormData();
         formDataToSend.append('image', formData.image);
         formDataToSend.append('description', formData.description);
 
-        // Make an API request to your Python backend
         try {
         const response = await axios.post('/api/submit', formDataToSend);
         console.log(response.data); // Handle the response as needed
@@ -28,7 +24,6 @@ const HomePage = () => {
         }
     };
 
-    // Event handler for updating form data
     const handleChange = (e) => {
         const { name, value, files } = e.target;
 
@@ -61,7 +56,7 @@ const HomePage = () => {
 
             <div className='col-5 my-auto mx-auto m-4' id='newpost'>
                 <form onSubmit={handleSubmit}>
-                {/* Image upload field */}
+
                     <div className='mb-3'>
                         <label htmlFor='image' className='form-label'>
                             Upload Image:
@@ -76,7 +71,6 @@ const HomePage = () => {
                         />
                     </div>
 
-                    {/* Description field */}
                     <div className='mb-3'>
                         <label htmlFor='description' className='form-label'>
                             Description:
@@ -91,7 +85,6 @@ const HomePage = () => {
                         />
                     </div>
 
-                    {/* Submit button */}
                     <button type='submit' className='btn btn-primary'>
                     Submit
                     </button>
