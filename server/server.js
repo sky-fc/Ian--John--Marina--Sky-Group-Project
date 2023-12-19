@@ -10,6 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.post('/register', UserController.register);
+app.post('/login', UserController.login);
 
 sequelize.sync().then(() => {
     app.listen(process.env.PORT, () => {
