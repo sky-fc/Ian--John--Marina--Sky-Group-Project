@@ -1,9 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const HomePage = (props) => {
+const HomePage = () => {
+    // State to manage form data
+    const [formData, setFormData] = useState({
+        image: null,
+        description: '',
+    });
+
+    // Event handler for form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Create a FormData object to send files
+        const formDataToSend = new FormData();
+        formDataToSend.append('image', formData.image);
+        formDataToSend.append('description', formData.description);
+
+        // Make an API request to your Python backend
+        try {
+        const response = await axios.post('/api/submit', formDataToSend);
+        console.log(response.data); // Handle the response as needed
+        } catch (error) {
+        console.error('Error submitting form:', error);
+        }
+    };
+
+    // Event handler for updating form data
+    const handleChange = (e) => {
+        const { name, value, files } = e.target;
+
+        setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: files ? files[0] : value,
+        }));
+    };
 
     return (
         <div>
@@ -15,9 +48,9 @@ const HomePage = (props) => {
                 <Link to="/logout">Logout</Link>
                 </div>
             </div>
-            <div>
+            <div className='mb-3'>
             <h2 className='text-center m-2'>Bright Ideas</h2>
-            <h5 className='my-auto mx-auto col-8'>
+            <h5 className='my-auto mx-auto col-8 text-center'>
                 This app allows you to post an image with a 
                 short description that acts as a story prompt. 
                 Your image and description can encourage people 
@@ -26,6 +59,44 @@ const HomePage = (props) => {
             </h5>
             </div>
 
+            <div className='col-5 my-auto mx-auto m-4' id='newpost'>
+                <form onSubmit={handleSubmit}>
+                {/* Image upload field */}
+                    <div className='mb-3'>
+                        <label htmlFor='image' className='form-label'>
+                            Upload Image:
+                        </label>
+                        <input
+                            type='file'
+                            className='form-control'
+                            id='image'
+                            name='image'
+                            accept='image/*'
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    {/* Description field */}
+                    <div className='mb-3'>
+                        <label htmlFor='description' className='form-label'>
+                            Description:
+                        </label>
+                        <textarea
+                            className='form-control'
+                            id='description'
+                            name='description'
+                            value={formData.description}
+                            onChange={handleChange}
+                            placeholder='Add your description here!'
+                        />
+                    </div>
+
+                    {/* Submit button */}
+                    <button type='submit' className='btn btn-primary'>
+                    Submit
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };
