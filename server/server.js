@@ -1,21 +1,24 @@
 require('dotenv').config();
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const cors = require('cors');
+
 const jwt = require('jsonwebtoken');
 const User = require('./models/UserModel');
 const UserController = require('./controllers/UserController'); 
-const sequelize = require('./config/sequelize.config');
-const app = express();
 
+
+const sequelize = require('./config/sequelize.config');
+const userRoutes = require('./routes/User.routes');
+const app = express();
+//.. updated version with User.routes.js holds the login and registration
 app.use(cors());
 app.use(express.json());
 
-app.post('/register', UserController.register);
-app.post('/login', UserController.login);
+
+app.use('/users', userRoutes);
 
 sequelize.sync().then(() => {
     app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+        console.log(`Server is running on port ${process.env.PORT}`);
     });
 });
