@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel');
 
 const UserController = {
-  // Registering a new user
+    // Registering a new user
     register: async (req, res) => {
         try {
             const { name, alias, email, password } = req.body;
@@ -32,7 +32,7 @@ const UserController = {
         login: async (req, res) => {
             try {
             const { email, password } = req.body;
-        // Check for user
+            // Check for user
             const user = await User.findOne({ where: { email } });
             if (!user) {
                 return res.status(400).json({ message: "User not found." });
