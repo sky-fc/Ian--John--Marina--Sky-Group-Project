@@ -27,7 +27,7 @@ const AuthComponent = () => {
 
     const handleRegister = async () => {
         try {
-        const response = await axios.post('/register', registrationData);
+        const response = await axios.post('/users/register', registrationData);
 
         console.log(response.data); 
         navigate('/home');
@@ -38,7 +38,7 @@ const AuthComponent = () => {
 
     const handleLogin = async () => {
         try {
-        const response = await axios.post('/login', loginData);
+        const response = await axios.post('/users/login', loginData);
         console.log(response.data); 
         } catch (error) {
         console.error('Error logging in:', error);
