@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+// import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import HomePage from '../components/HomePage';
+import AuthComponent from '../components/Auth';
 
 const Main = (props) => {
     
     return (
         <div>
-            <HomePage/>
+            <AuthComponent/>
         </div>
     )
 }
