@@ -17,7 +17,8 @@ const UserController = {
             const hashedPassword = await bcrypt.hash(password, salt);
             // Create new user
             const newUser = await User.create({
-                name,
+                first_name,
+                last_name,
                 alias,
                 email,
                 password: hashedPassword

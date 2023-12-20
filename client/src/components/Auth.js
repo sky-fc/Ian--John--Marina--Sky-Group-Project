@@ -58,13 +58,25 @@ const AuthComponent = () => {
                     <form>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">
-                            Name:
+                            First Name:
                             </label>
                             <input
                             type="text"
                             className="form-control"
-                            id="name"
-                            name="name"
+                            id="first_name"
+                            name="first_name"
+                            onChange={handleRegistrationInputChange}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="name" className="form-label">
+                             Last Name:
+                            </label>
+                            <input
+                            type="text"
+                            className="form-control"
+                            id="last_name"
+                            name="last_name"
                             onChange={handleRegistrationInputChange}
                             />
                         </div>
