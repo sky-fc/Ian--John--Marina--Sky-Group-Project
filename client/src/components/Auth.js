@@ -12,7 +12,7 @@ const AuthComponent = () => {
         email: '',
         password: '',
     });
-
+// Text here
     const [loginData, setLoginData] = useState({
         email: '',
         password: '',

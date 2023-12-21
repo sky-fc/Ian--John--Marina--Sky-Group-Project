@@ -12,6 +12,8 @@ const HomePage = () => {
     const navigate = useNavigate;
     const [userName, setUserName] = useState('');
 
+    // Adding something here
+
     useEffect(() => {
         // Fetch user data after component mounts
         const fetchUserData = async () => {

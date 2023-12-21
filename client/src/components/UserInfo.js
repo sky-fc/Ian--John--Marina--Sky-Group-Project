@@ -24,6 +24,8 @@ const UserInfo = () => {
             console.error('Error fetching user data:', error);
         }
     };
+
+    // Adding something here
     const handleLogout = () => {
         localStorage.removeItem('authToken');
         window.location.href = '/';
