@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'bootstrap';
 
 const HomePage = () => {
     const [formData, setFormData] = useState({
@@ -33,27 +32,45 @@ const HomePage = () => {
         fetchUserData(); // If you are using the function
     }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const [ideas, setIdeas] = useState([]);
 
-        const formDataToSend = new FormData();
-        formDataToSend.append('image', formData.image);
-        formDataToSend.append('description', formData.description);
-
+    useEffect(() => {
+        const fetchIdeas = async () => {
         try {
-        const response = await axios.post('/api/submit', formDataToSend);
-        console.log(response.data); // Handle the response as needed
+        const response = await axios.get('http://localhost:5000/ideas');
+        setIdeas(response.data);
         } catch (error) {
-        console.error('Error submitting form:', error);
+        console.error('Error fetching ideas:', error);
         }
     };
 
+    fetchIdeas();
+    }, []);
 
-    const handleLogout = () => {
-        // Clear the authentication token from local storage
-        localStorage.removeItem('authToken');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         
-        // Redirect the user to the login page
+        const formDataToSend = new FormData();
+        formDataToSend.append('image', formData.image);
+        formDataToSend.append('ideas', formData.description); // Update this line
+        
+        try {
+            const response = await axios.post('http://localhost:5000/ideas', formDataToSend, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+            });
+        
+            console.log(response.data);
+
+            setIdeas((prevIdeas) => [...prevIdeas, response.data]);
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
+    };
+        
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
         window.location.href = '/';
     };
 
@@ -87,7 +104,8 @@ const HomePage = () => {
             </h5>
             </div>
 
-            <div className='col-5 my-auto mx-auto m-4' id='newpost'>
+            <div className='col-5 my-auto mx-auto m-4 p-5 border border-solid border-dark text-center' id='newidea'>
+                <h3>Add an Idea</h3>
                 <form onSubmit={handleSubmit}>
 
                     <div className='mb-3'>
@@ -122,6 +140,14 @@ const HomePage = () => {
                     Submit
                     </button>
                 </form>
+            </div>
+            <div className="mt-4 my-auto mx-auto">
+                <h3>Recent Ideas:</h3>
+                <ul>
+                {ideas.map((idea) => (
+                    <li key={idea.id}>{idea.ideas}</li>
+                ))}
+                </ul>
             </div>
         </div>
     );
