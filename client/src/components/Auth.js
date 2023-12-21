@@ -6,7 +6,8 @@ const AuthComponent = () => {
     const navigate = useNavigate();
 
     const [registrationData, setRegistrationData] = useState({
-        name: '',
+        first_name: '',
+        last_name: '',
         alias: '',
         email: '',
         password: '',
@@ -20,31 +21,32 @@ const AuthComponent = () => {
     const handleRegistrationInputChange = (e) => {
         setRegistrationData({ ...registrationData, [e.target.name]: e.target.value });
     };
-
+    
     const handleLoginInputChange = (e) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
     };
-
+    
     const handleRegister = async () => {
+        console.log("Registration Data:", registrationData);
         try {
-        const response = await axios.post('/register', registrationData);
-
-        console.log(response.data); 
-        navigate('/home');
+            const response = await axios.post('http://localhost:5000/users/register', registrationData);
+            console.log(response.data);
+            navigate('/home');
         } catch (error) {
-        console.error('Error registering user:', error);
+            console.error('Error registering user:', error);
         }
     };
-
+    
     const handleLogin = async () => {
+        console.log("Login Data:", loginData);
         try {
-        const response = await axios.post('/login', loginData);
-        console.log(response.data); 
+            const response = await axios.post('http://localhost:5000/users/login', loginData);
+            console.log(response.data);
         } catch (error) {
-        console.error('Error logging in:', error);
+            console.error('Error logging in:', error);
         }
     };
-
+    
 
 
     return (
@@ -70,7 +72,7 @@ const AuthComponent = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">
-                             Last Name:
+                            Last Name:
                             </label>
                             <input
                             type="text"
