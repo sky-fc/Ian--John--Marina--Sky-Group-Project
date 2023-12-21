@@ -2,6 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const IdeaController = require('../controllers/IdeaController');
 const router = express.Router();
+const path = require('path');
+
 
 // Set up storage for file uploads
 const storage = multer.diskStorage({

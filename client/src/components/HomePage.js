@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
     const [formData, setFormData] = useState({
         image: null,
-        description: '',
+        ideas: '', 
     });
 
     const navigate = useNavigate;
@@ -17,19 +17,21 @@ const HomePage = () => {
         const fetchUserData = async () => {
             try {
             const token = localStorage.getItem('authToken');
-            console.log("Token:", token) // Replace with your actual token key
+            console.log("Token:", token) 
             const response = await axios.get('http://localhost:5000/users/profile', {
                 headers: {
                 Authorization: `Bearer ${token}`,
                 },
             });
             setUserName(response.data.first_name);
+            localStorage.setItem('userId', response.data.id); 
+
             } catch (error) {
             console.error('Error fetching user data:', error);
             }
         };
         
-        fetchUserData(); // If you are using the function
+        fetchUserData(); 
     }, []);
 
     const [ideas, setIdeas] = useState([]);
@@ -49,20 +51,20 @@ const HomePage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+    
         const formDataToSend = new FormData();
         formDataToSend.append('image', formData.image);
-        formDataToSend.append('ideas', formData.description); // Update this line
-        
+        formDataToSend.append('ideas', formData.ideas); // Change 'description' to 'ideas'
+        formDataToSend.append('userId', localStorage.getItem('userId'));
+    
         try {
             const response = await axios.post('http://localhost:5000/ideas', formDataToSend, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
             });
-        
+    
             console.log(response.data);
-
             setIdeas((prevIdeas) => [...prevIdeas, response.data]);
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -85,11 +87,10 @@ const HomePage = () => {
 
     return (
         <div>
-            <div className="d-flex justify-content-between align-items-center p-2 border border-solid border-dark">
+            <div className="d-flex justify-content-between align-items-center border border-solid border-dark">
             <h2>Hi, {userName}</h2>
                 <div className='p-1 text-end'>
-                <Link to="/bright-ideas" className="me-3">Bright Ideas</Link>
-                <Link to="/profile" className="me-3">Profile</Link>
+                <Link to={`/users/${localStorage.getItem('userId')}`} className="btn btn-primary m-2">Profile</Link>
                 <button onClick={handleLogout} className='btn btn-danger'>Logout</button>
                 </div>
             </div>
@@ -124,15 +125,15 @@ const HomePage = () => {
 
                     <div className='mb-3'>
                         <label htmlFor='description' className='form-label'>
-                            Description:
+                            Story Idea:
                         </label>
                         <textarea
                             className='form-control'
-                            id='description'
-                            name='description'
-                            value={formData.description}
+                            id='ideas'
+                            name='ideas'
+                            value={formData.ideas}
                             onChange={handleChange}
-                            placeholder='Add your description here!'
+                            placeholder='Add your new story idea here!'
                         />
                     </div>
 
@@ -142,7 +143,7 @@ const HomePage = () => {
                 </form>
             </div>
             <div className="mt-4 my-auto mx-auto">
-                <h3>Recent Ideas:</h3>
+                <h3 className='text-center'>All Story Ideas:</h3>
                 <ul>
                 {ideas.map((idea) => (
                     <li key={idea.id}>{idea.ideas}</li>

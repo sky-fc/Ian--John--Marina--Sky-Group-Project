@@ -20,16 +20,38 @@ const AuthComponent = () => {
 
     const [user, setUser] = useState(null);  // Define the user state
 
+    const [registrationError, setRegistrationError] = useState(null);
+    const [loginError, setLoginError] = useState(null);
+
     const handleRegistrationInputChange = (e) => {
         setRegistrationData({ ...registrationData, [e.target.name]: e.target.value });
+        setRegistrationError(null); // Clear previous error when input changes
     };
     
     const handleLoginInputChange = (e) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
+        setLoginError(null); // Clear previous error when input changes
     };
     
     const handleRegister = async () => {
         console.log("Registration Data:", registrationData);
+
+        // Validation
+        if (registrationData.first_name.length < 2) {
+            setRegistrationError('First name must be at least 2 characters.');
+            return;
+        }
+
+        if (registrationData.last_name.length < 2) {
+            setRegistrationError('Last name must be at least 2 characters.');
+            return;
+        }
+
+        if (!registrationData.email) {
+            setRegistrationError('Email is required.');
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:5000/users/register', registrationData);
             console.log(response.data);
@@ -51,6 +73,13 @@ const AuthComponent = () => {
 
     const handleLogin = async () => {
         console.log("Login Data:", loginData);
+
+        // Validation
+        if (!loginData.email) {
+            setLoginError('Email is required.');
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:5000/users/login', loginData);
             console.log(response.data);
@@ -68,7 +97,6 @@ const AuthComponent = () => {
         }
     };
 
-
     return (
         <div className="container">
             <div className='text-center border-bottom border-solid border-dark mb-5'>
@@ -80,64 +108,65 @@ const AuthComponent = () => {
                     <form>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">
-                            First Name:
+                                First Name:
                             </label>
                             <input
-                            type="text"
-                            className="form-control"
-                            id="first_name"
-                            name="first_name"
-                            onChange={handleRegistrationInputChange}
+                                type="text"
+                                className="form-control"
+                                id="first_name"
+                                name="first_name"
+                                onChange={handleRegistrationInputChange}
                             />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">
-                            Last Name:
+                                Last Name:
                             </label>
                             <input
-                            type="text"
-                            className="form-control"
-                            id="last_name"
-                            name="last_name"
-                            onChange={handleRegistrationInputChange}
+                                type="text"
+                                className="form-control"
+                                id="last_name"
+                                name="last_name"
+                                onChange={handleRegistrationInputChange}
                             />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="alias" className="form-label">
-                            Alias:
+                                Alias:
                             </label>
                             <input
-                            type="text"
-                            className="form-control"
-                            id="alias"
-                            name="alias"
-                            onChange={handleRegistrationInputChange}
+                                type="text"
+                                className="form-control"
+                                id="alias"
+                                name="alias"
+                                onChange={handleRegistrationInputChange}
                             />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">
-                            Email:
+                                Email:
                             </label>
                             <input
-                            type="email"
-                            className="form-control"
-                            id="email"
-                            name="email"
-                            onChange={handleRegistrationInputChange}
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                name="email"
+                                onChange={handleRegistrationInputChange}
                             />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label">
-                            Password:
+                                Password:
                             </label>
                             <input
-                            type="password"
-                            className="form-control"
-                            id="password"
-                            name="password"
-                            onChange={handleRegistrationInputChange}
+                                type="password"
+                                className="form-control"
+                                id="password"
+                                name="password"
+                                onChange={handleRegistrationInputChange}
                             />
                         </div>
+                        {registrationError && <p className="text-danger">{registrationError}</p>}
                         <button type="button" className="btn btn-primary" onClick={handleRegister}>
                             Register
                         </button>
@@ -148,28 +177,29 @@ const AuthComponent = () => {
                     <form>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">
-                            Email:
+                                Email:
                             </label>
                             <input
-                            type="email"
-                            className="form-control"
-                            id="loginEmail"
-                            name="email"
-                            onChange={handleLoginInputChange}
+                                type="email"
+                                className="form-control"
+                                id="loginEmail"
+                                name="email"
+                                onChange={handleLoginInputChange}
                             />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label">
-                            Password:
+                                Password:
                             </label>
                             <input
-                            type="password"
-                            className="form-control"
-                            id="loginPassword"
-                            name="password"
-                            onChange={handleLoginInputChange}
+                                type="password"
+                                className="form-control"
+                                id="loginPassword"
+                                name="password"
+                                onChange={handleLoginInputChange}
                             />
                         </div>
+                        {loginError && <p className="text-danger">{loginError}</p>}
                         <button type="button" className="btn btn-success" onClick={handleLogin}>
                             Login
                         </button>
